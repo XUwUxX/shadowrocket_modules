@@ -1,5 +1,5 @@
 #!name=𝐀𝐥𝐥 𝐈𝐧 𝐎𝐧𝐞
-#!desc=𝐁𝐲: Cuizz
+#!desc=𝐁𝐲: Cùizz | Cập nhật: 12/04/2025 | FB: facebook.com/anhztuan.1710
 
 [Rule]
 AND,((DOMAIN-SUFFIX,googlevideo.com), (PROTOCOL,UDP)),REJECT
