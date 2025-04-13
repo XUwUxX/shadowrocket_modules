@@ -60,6 +60,10 @@ wink = type=http-response,pattern=^https:\/\/api-sub\.meitu\.com\/v\d\/user\/vip
 #hostname = iap.etm.tech
 SpeedTest=type=http-response,pattern=^https:\/\/iap\.etm\.tech\/receipts,requires-body=1,script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/Speed_Test_Master.js
 
+#Wink 解锁
+#hostname = api-sub.meitu.com
+WinkForeverVipCrack.js=type=http-response,pattern=^https?:\/\/api-sub\.meitu\.com\/v2\/user\/vip_info_by_group\.json,requires-body=1,script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/WinkForeverVipCrack.js
+
 [Map Local]
 ^https?:\/\/[\w-]+\.googlevideo\.com\/initplayback.+&oad data-type=text data=""
 
