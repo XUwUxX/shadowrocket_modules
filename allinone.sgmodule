@@ -1,71 +1,96 @@
-#!name=All In One
-#!desc=By: Cùizz | Cập nhật: 13/04/2025 | FB: facebook.com/anhztuan.1710
-
-[Rule]
-AND,((DOMAIN-SUFFIX,googlevideo.com), (PROTOCOL,UDP)),REJECT
-AND,((DOMAIN,youtubei.googleapis.com), (PROTOCOL,UDP)),REJECT
-
-[Header Rewrite]
-^https?://api.revenuecat.com/.+/(receipts$|subscribers/?(.*?)*$) header-del x-revenuecat-etag
-^https?://api.revenuecat.com/.+/(receipts$|subscribers/?(.*?)*$) header-del X-RevenueCat-ETag
-^https:\/\/spclient\.wg\.spotify\.com\/user-customization-service\/v1\/customize$ header-del if-none-match
+#!url=https://shadowrocketdhungx.vercel.app/all-in-one.module
+#!name=All-In-One Unlock (Wink + DHungx)
+#!desc=Mở khóa Wink VIP, Locket Gold, Spotify Premium, YouTube Premium (PIP, nền, 4K), Bilibili (Không quảng cáo), SoundCloud Go+ & chặn quảng cáo nâng cao
+#!author=DHungx + yqc007
+# Update: 03/04/2025
+# Telegram: https://t.me/dhungx
+# Discord: https://discord.gg/WT9bUkVCTx
+#!icon=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/YouTube.png
 
 [Script]
+# Wink 解锁会员
+WinkVIP=type=http-response,pattern=^https?:\/\/api-sub\.meitu\.com\/v2\/user\/vip_info_by_group\.json,requires-body=1,script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/WinkForeverVipCrack.js
 
-#Sub-Store
-#hostname = sub.store
-Sub-Store Core=type=http-request,pattern=^https?:\/\/sub\.store\/((download)|api\/(preview|sync|(utils\/node-info))),script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-1.min.js,requires-body=true,timeout=120
-Sub-Store Simple=type=http-request,pattern=^https?:\/\/sub\.store,script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/sub-store-0.min.js,requires-body=true
-Sub-Store Sync=type=cron,cronexp=0 0 * * *,wake-system=1,timeout=120,script-path=https://github.com/sub-store-org/Sub-Store/releases/latest/download/cron-sync-artifacts.min.js
-#************************************#
+# Locket Gold Unlock
+revenuecat=type=http-response,pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$),script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/main/js/locket/Locket.js,requires-body=true,timeout=60
+deleteHeader=type=http-request,pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers),script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/main/js/locket/deleteHeader.js,timeout=60
 
-#Youtube
-#hostname = *.googlevideo.com, youtubei.googleapis.com
-youtube.request = type=http-request,pattern=^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|reel\/reel_watch_sequence|get_watch),requires-body=1,max-size=-1,binary-body-mode=1,engine=jsc,script-path=https://github.com/lonely0811/Surge/raw/main/js/youtube.request.preview.js
-youtube.response = type=http-response,pattern=^https:\/\/youtubei\.googleapis\.com\/youtubei\/v1\/(browse|next|player|search|reel\/reel_watch_sequence|guide|account\/get_setting|get_watch),requires-body=1,max-size=-1,binary-body-mode=1,engine=jsc,script-path=https://github.com/lonely0811/Surge/raw/main/js/youtube.response.preview.js,argument="{"lyricLang":"off","captionLang":"off","blockUpload":true,"blockImmersive":true,"debug":true}"
-#************************************#
+# Spotify Premium Unlock
+spotify-proto=type=http-response,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/main/js/spotify/spotify.js
 
-#SpotifyPremium
-#hostname = spclient.wg.spotify.com
-spotify-json = type=http-request,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(artistview\/v1\/artist|album-entity-view\/v2\/album)\/,requires-body=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-json.js
-spotify-proto = type=http-response,pattern=^https:\/\/spclient\.wg\.spotify\.com\/(bootstrap\/v1\/bootstrap|user-customization-service\/v1\/customize)$,requires-body=1,binary-body-mode=1,max-size=0,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/spotify-proto.js,script-update-interval=0
-#************************************#
+# YouTube Premium Unlock & BlockAd
+youtube.response=type=http-response,pattern=^https://youtubei\.googleapis\.com/youtubei/v1/(browse|next|player|search|reel/reel_watch_sequence|guide|account/get_setting|get_watch),requires-body=1,max-size=-1,binary-body-mode=1,engine=script,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/main/js/Yt/youtube.response.preview.js,argument="{\"enablePIP\":true,\"enableBackgroundPlay\":true,\"unlockResolution\":true}"
 
-#SoundCloudGo+
-#hostname= api-mobile.soundcloud.com
-SoundCloudGo+=type=http-response,pattern=https://api-mobile.soundcloud.com/configuration/ios,requires-body=1,script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/SoundCloud.js
-#************************************#
+# Bilibili 解锁 + chặn quảng cáo
+cinema_ads=type=http-response,pattern=^https?:\/\/api\.(bilibili|biliapi)\.(com|net)\/pgc\/page\/cinema\/tab\?,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+splash_ads=type=http-response,pattern=^https:\/\/app\.bilibili\.com\/x\/v2\/splash\/list,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+forced_skin=type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/skin\?,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+quality_unlock=type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/myinfo\?,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+search_square=type=http-response,pattern=^https://app.bilibili.com/x/v2/search/square,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+feed_ads=type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/feed\/index,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+bangumi_ads=type=http-response,pattern=^https?:\/\/api\.(bilibili|biliapi)\.(com|net)\/pgc\/page\/bangumi,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+live_ads=type=http-response,pattern=^https?:\/\/api\.live\.bilibili\.com\/xlive\/app-room\/v1\/index\/getInfoByRoom,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+dynamic_ads=type=http-response,pattern=^https?:\/\/api\.vc\.bilibili\.com\/dynamic_svr\/v1\/dynamic_svr\/dynamic_(history|new)\?,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+tab_customize=type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/resource\/show\/tab,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+mine_customize=type=http-response,pattern=^https?:\/\/app\.bilibili\.com\/x\/v2\/account\/mine,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/bilibili/bilibili_json.js
+proto_ads=type=http-response,pattern=^https:\/\/app\.bilibili\.com\/bilibili\.app\.(view\.v1\.View\/View|dynamic\.v2\.Dynamic\/DynAll)$,requires-body=1,script-path=https://raw.githubusercontent.com/app2smile/rules/master/js/bilibili-proto.js
+dynamic_ads_alt=type=http-response,pattern=^https://app\.bilibili\.com/bilibili\.app\.dynamic\.v2\.Dynamic/DynAll$,requires-body=1,script-path=https://raw.githubusercontent.com/yjqiang/surge_scripts/main/scripts/bilibili/bilibili_dynamic.js
 
-#Revenuecat
-#hostname = api.revenuecat.com
-revenuecat = type=http-response, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts$|subscribers\/[^/]+$), script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/Locket_Gold.js, requires-body=true, max-size=-1, timeout=60
-
-deleteHeader = type=http-request, pattern=^https:\/\/api\.revenuecat\.com\/.+\/(receipts|subscribers), script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/LKG_delete_header.js, timeout=60
-#************************************#
-
-#Truecaller
-#hostname = premium*.truecaller.com
-Truecaller = type=http-response,pattern=^https://premium-(.+)\.truecaller\.com/v\d/(subscriptions|products\/apple),requires-body=1,max-size=0,script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/TrueCaller.js
-#************************************#
-
-#CamScanner
-#hostname = ap*.intsig.net
-Camscanner = requires-body=1,script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/camscanner.js,type=http-response,pattern= https:\/\/(api|api-cs.*)\.intsig\.net\/purchase\/cs\/query_prop
-
-#WinK
-#hostname = api-sub.meitu.com
-wink = type=http-response,pattern=^https:\/\/api-sub\.meitu\.com\/v\d\/user\/vip_info_by_group,requires-body=1,max-size=0,script-path=http://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/wink.js
-
-#Speed_Test_Master
-#hostname = iap.etm.tech
-SpeedTest=type=http-response,pattern=^https:\/\/iap\.etm\.tech\/receipts,requires-body=1,script-path=https://raw.githubusercontent.com/DungHoang120401/Nobita/refs/heads/main/Scripts/Speed_Test_Master.js
-
-#Wink 解锁
-#hostname = api-sub.meitu.com
-WinkForeverVipCrack.js=type=http-response,pattern=^https?:\/\/api-sub\.meitu\.com\/v2\/user\/vip_info_by_group\.json,requires-body=1,script-path=https://raw.githubusercontent.com/yqc007/QuantumultX/master/WinkForeverVipCrack.js
-
-[Map Local]
-^https?:\/\/[\w-]+\.googlevideo\.com\/initplayback.+&oad data-type=text data=""
+# SoundCloud Go+ Unlock
+SoundCloudGo+=type=http-response,pattern=https://api-mobile.soundcloud.com/configuration/ios,requires-body=1,script-path=https://raw.githubusercontent.com/dhungx/modules-shadowrocket/refs/heads/main/js/SoundCloud/soundcloud.js
 
 [MITM]
-hostname = %APPEND% *.googlevideo.com, youtubei.googleapis.com, premium*.truecaller.com, sub.store, api.revenuecat.com, spclient.wg.spotify.com, api-mobile.soundcloud.com, ap*.intsig.net, api-sub.meitu.com, iap.etm.tech
+hostname = %APPEND%
+api-sub.meitu.com,
+api.revenuecat.com,
+spclient.wg.spotify.com,
+redirector*.googlevideo.com,
+*.googlevideo.com,
+www.youtube.com,
+s.youtube.com,
+youtubei.googleapis.com,
+adservice.google.com,
+securepubads.g.doubleclick.net,
+app.bilibili.com,
+api.live.bilibili.com,
+api.vc.bilibili.com,
+api.bilibili.com,
+manga.bilibili.com,
+grpc.biliapi.net,
+api.biliapi.net,
+-broadcast.chat.bilibili.com,
+-*cdn*.biliapi.net,
+-*tracker*.biliapi.net,
+api-mobile.soundcloud.com
+
+[Rule]
+# YouTube Ads Block
+AND,((DOMAIN-SUFFIX,googlevideo.com), (PROTOCOL,UDP)),REJECT
+AND,((DOMAIN,youtubei.googleapis.com), (PROTOCOL,UDP)),REJECT
+DOMAIN-SUFFIX,ads.youtube.com,REJECT
+DOMAIN-SUFFIX,adservice.google.com,REJECT
+DOMAIN-SUFFIX,doubleclick.net,REJECT
+DOMAIN-SUFFIX,googleads.g.doubleclick.net,REJECT
+
+[URL Rewrite]
+(^https?://[\w-]+\.googlevideo\.com/(?!dclk_video_ads).+?)&ctier=L(&.+?),ctier,(.+) $1$2$3 302
+^https?://[\w-]+\.googlevideo\.com/(?!(dclk_video_ads|videoplayback?)).+&oad _ reject-200
+^https?://(www|s)\.youtube\.com/api/stats/ads _ reject-200
+^https?://(www|s)\.youtube\.com/(pagead|ptracking) _ reject-200
+^https?://s\.youtube\.com/api/stats/qoe\?adcontext _ reject-200
+^https?://(www|s)\.youtube\.com/get_midroll_info _ reject-200
+^https?://(www|s)\.youtube\.com/get_vmap _ reject-200
+
+# Bilibili Ads Block
+^https?:\/\/app\.bilibili\.com\/x\/resource\/ip - reject
+^https?:\/\/app\.bilibili\.com\/bilibili\.app\.interface\.v1\.Search\/Default - reject
+^https?:\/\/app\.bilibili\.com\/x\/resource\/top\/activity - reject-dict
+^https://app.bilibili.com/x/v2/splash/show - reject-dict
+^https://app.bilibili.com/x/v2/search/defaultwords - reject-dict
+^https?:\/\/api\.bilibili\.com\/x\/vip\/ads\/material\/report - reject-dict
+^https://api.bilibili.com/pgc/season/player/cards - reject-dict
+(^https?:\/\/app\.biliintl.com\/intl\/.+)(&sim_code=\d+)(.+) - 302 $1$3
+^https?:\/\/api\.vc\.bilibili\.com\/search_svr\/v\d\/Search\/recommend_words - reject
+^https?:\/\/api\.vc\.bilibili\.com\/topic_svr\/v1\/topic_svr - reject-dict
+^https?:\/\/api\.bilibili\.com\/pgc\/season\/app\/related\/recommend\? - reject-dict
+^https?:\/\/manga\.bilibili\.com\/twirp\/comic\.v\d\.Comic\/(Flash|ListFlash) - reject-dict
